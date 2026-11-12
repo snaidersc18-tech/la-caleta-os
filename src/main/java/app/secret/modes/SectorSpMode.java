@@ -28,10 +28,10 @@ public final class SectorSpMode extends BaseMode {
     }
 
     @Override protected List<Supplier<Cinematic>> cinematics() {
-        return List.of(() -> DaveTheDiverAnimations.sofia(ctx.audio()));
+        return List.of(() -> DaveTheDiverAnimations.sofia(ctx().audio()));
     }
 
-    @Override protected TakeoverView createInterface(Runnable exit) { return new SofiaView(ctx, exit); }
+    @Override protected TakeoverView createInterface(Runnable exit) { return new SofiaView(ctx(), exit); }
 
     // la misma pista acompaña cinemática e interfaz: AudioManager no la reinicia al pasar de fase
     @Override protected MusicTrack cinematicMusic() { return MusicTrack.SOFIA_THEME; }

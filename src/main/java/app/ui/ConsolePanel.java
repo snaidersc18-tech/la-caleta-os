@@ -4,6 +4,7 @@ import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -73,6 +74,9 @@ public final class ConsolePanel extends VBox {
 
     public void setOnBackdoor(Runnable r) { backdoor.setOnAction(e -> r.run()); }
     public Label titleLabel() { return header; }
+
+    /** Texto del cuerpo de la consola, de solo lectura (para escuchar el tecleo sin conocer los nodos internos). */
+    public ReadOnlyStringProperty bodyTextProperty() { return body.textProperty(); }
 
     // ---- API de escritura (llamar siempre desde el hilo de JavaFX)
 

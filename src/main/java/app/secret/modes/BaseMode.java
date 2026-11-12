@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  */
 abstract class BaseMode implements SecretMode {
 
-    protected SecretContext ctx;
+    private SecretContext ctx;
     private boolean active;
     private final List<Cinematic> cinematics = new ArrayList<>();
     private TakeoverView ui;
@@ -42,6 +42,9 @@ abstract class BaseMode implements SecretMode {
     protected SoundEffect entrySound() { return null; }
     protected MusicTrack cinematicMusic() { return null; }
     protected MusicTrack interfaceMusic() { return null; }
+
+    /** El contexto del modo (lo fija activate()); las subclases lo leen, no lo reasignan. */
+    protected final SecretContext ctx() { return ctx; }
 
     // ------------------------------------------------------------------ flujo (final: el orden no se negocia)
 
@@ -98,7 +101,8 @@ abstract class BaseMode implements SecretMode {
         active = false;
         ctx.fsm().transition(State.RESTORING);
         for (Cinematic c : cinematics) {
-            try { c.stop(); } catch (RuntimeException ignored) { /* seguir limpiando */ }
+            try { c.stop(); }
+            catch (RuntimeException ex) { System.err.println("[modo] una cinemática falló al detenerse (se sigue limpiando): " + ex); }
         }
         cinematics.clear();
         if (ui != null) { ui.dispose(); ctx.layer().getChildren().remove(ui); ui = null; }

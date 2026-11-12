@@ -208,6 +208,6 @@ public final class VeranoCinematicView extends TakeoverView implements Cinematic
     private void drawConcho(int pose, boolean flash) {
         GraphicsContext g = concho.getGraphicsContext2D();
         g.clearRect(0, 0, concho.getWidth(), concho.getHeight());
-        PixelArt.draw(g, ConchoSprite.generate(pose, flash).g, ConchoSprite.PALETTE, 0, 0, PX);
+        PixelArt.draw(g, ConchoSprite.generate(pose, flash), ConchoSprite.PALETTE, 0, 0, PX);
     }
 }

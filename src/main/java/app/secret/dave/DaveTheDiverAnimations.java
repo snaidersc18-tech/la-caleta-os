@@ -55,10 +55,10 @@ public final class DaveTheDiverAnimations {
             stage.setFocusTraversable(true);
             stage.setOnKeyPressed(e -> { if (e.getCode() == KeyCode.ESCAPE) skip(); });
             stage.requestFocus();
-            if (stage.syncTrack == null || stage.audio() == null) { master.play(); return; }
+            if (stage.syncTrack() == null || stage.audio() == null) { master.play(); return; }
             // Rhythm sync: la canción arranca justo antes de su drop y el guion se ancla al audio real
-            double songStart = Math.max(0, stage.syncTrack.dropMs - stage.syncTimelineMs);
-            stage.audio().playMusic(stage.syncTrack, songStart);
+            double songStart = Math.max(0, stage.syncTrack().dropMs - stage.syncTimelineMs());
+            stage.audio().playMusic(stage.syncTrack(), songStart);
             stage.audio().whenMusicPlaying(pos -> {
                 if (finished || disposed) return;
                 if (pos < 0) { master.play(); return; }              // sin audio: el guion corre igual

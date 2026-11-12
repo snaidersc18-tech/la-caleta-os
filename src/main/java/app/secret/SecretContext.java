@@ -5,11 +5,7 @@ import app.ui.ConsolePanel;
 import app.ui.MainView;
 import javafx.animation.FadeTransition;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
 
 /**
@@ -99,22 +95,12 @@ public final class SecretContext {
 
     /**
      * Gancho de sonido para el efecto máquina de escribir del núcleo (TypewriterEffect escribe con typeChar()).
-     * ConsolePanel no expone su texto, pero su estructura es estable: VBox[cabecera, ScrollPane[TextFlow[cuerpo, cursor]]].
-     * Se escucha el cuerpo y solo suena cuando crece exactamente 1 carácter: un println() completo no es "tecleo".
+     * Se escucha el texto del cuerpo que ConsolePanel expone de solo lectura (sin recorrer sus nodos internos) y solo
+     * suena cuando crece exactamente 1 carácter: un println() completo no es "tecleo".
      */
     private void hookConsoleTyping() {
-        Text body = consoleBody(ui.console());
-        if (body == null) return;                                // si el núcleo cambia su estructura, el gancho se apaga solo
-        body.textProperty().addListener((o, before, after) -> {
+        ui.console().bodyTextProperty().addListener((o, before, after) -> {
             if (before != null && after != null && after.length() == before.length() + 1 && fsm.isIdle()) audio.keyClick();
         });
-    }
-
-    private static Text consoleBody(Parent console) {
-        for (Node n : console.getChildrenUnmodifiable()) {
-            if (n instanceof ScrollPane sp && sp.getContent() instanceof TextFlow flow
-                    && !flow.getChildren().isEmpty() && flow.getChildren().get(0) instanceof Text t) return t;
-        }
-        return null;
     }
 }

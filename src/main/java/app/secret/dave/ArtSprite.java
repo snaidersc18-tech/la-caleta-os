@@ -14,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumMap;
 import java.util.Map;
@@ -60,7 +61,9 @@ public final class ArtSprite extends Group {
         return CACHE.computeIfAbsent(art, a -> {
             try (InputStream in = ArtSprite.class.getResourceAsStream("/art/" + a.file)) {
                 if (in != null) return new Image(in);
-            } catch (Exception ignored) { /* cae al marcador vacío */ }
+            } catch (IOException | RuntimeException ex) {             // close() declara IOException; Image falla en runtime
+                System.err.println("[art] No pude leer /art/" + a.file + ": " + ex);
+            }
             System.err.println("[art] Falta /art/" + a.file);
             return new WritableImage(1, 1);                     // nunca null: la cinemática sigue aunque falte el PNG
         });

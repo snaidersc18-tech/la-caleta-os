@@ -28,7 +28,7 @@ public final class BbyWowMode extends BaseMode {
     }
 
     @Override protected List<Supplier<Cinematic>> cinematics() {
-        return List.of(() -> new BbyWowCinematicView(ctx));
+        return List.of(() -> new BbyWowCinematicView(ctx()));
     }
 
     /** Red de seguridad: si la cinemática terminara sola, una vista vacía (CALLE sigue funcionando). */

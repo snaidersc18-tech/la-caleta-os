@@ -26,10 +26,10 @@ public final class DaftPunkMode extends BaseMode {
     }
 
     @Override protected List<Supplier<Cinematic>> cinematics() {
-        return List.of(() -> DaveTheDiverAnimations.daftPunk(ctx.audio()), () -> new DaftPunkCinematicView(ctx));
+        return List.of(() -> DaveTheDiverAnimations.daftPunk(ctx().audio()), () -> new DaftPunkCinematicView(ctx()));
     }
 
-    @Override protected TakeoverView createInterface(Runnable exit) { return new DaftPunkConsoleView(ctx, exit); }
+    @Override protected TakeoverView createInterface(Runnable exit) { return new DaftPunkConsoleView(ctx(), exit); }
 
     // La única música es "Harder, Better, Faster, Stronger": la arranca el preludio anclado a su drop y sigue sin
     // cortes por el concierto y la consola (playMusic con la misma pista no la reinicia).

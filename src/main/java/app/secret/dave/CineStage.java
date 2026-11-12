@@ -14,9 +14,9 @@ import java.util.List;
 
 /** Escenario de una cinemática: fondo, "mundo" (cámara: escala/traslación) y HUD, todo recortado a 1280x720. */
 public final class CineStage extends Pane {
-    public final Rectangle bg = new Rectangle(Cine.W, Cine.H, Color.BLACK);
-    public final Group world = new Group();
-    public final Pane hud = new Pane();
+    final Rectangle bg = new Rectangle(Cine.W, Cine.H, Color.BLACK);
+    final Group world = new Group();
+    final Pane hud = new Pane();
     private final List<Animation> anims = new ArrayList<>();
     private final List<Runnable> cleanups = new ArrayList<>();
     private final AudioManager audio;
@@ -39,8 +39,8 @@ public final class CineStage extends Pane {
     public Animation sfx(SoundEffect s) { return Cine.cue(() -> { if (audio != null) audio.play(s); }); }
 
     // ---- rhythm sync: el impacto del guion (en ms de la línea de tiempo) cae en el drop de la canción
-    MusicTrack syncTrack;
-    double syncTimelineMs;
+    private MusicTrack syncTrack;
+    private double syncTimelineMs;
 
     /**
      * Declara que el instante {@code timelineMs} del guion debe sonar EXACTAMENTE en {@link MusicTrack#dropMs} de
@@ -50,11 +50,16 @@ public final class CineStage extends Pane {
     public void syncImpact(MusicTrack t, double timelineMs) { syncTrack = t; syncTimelineMs = timelineMs; }
 
     AudioManager audio() { return audio; }
+    MusicTrack syncTrack() { return syncTrack; }
+    double syncTimelineMs() { return syncTimelineMs; }
 
     public void dispose() {
         for (Animation a : anims) a.stop();
         anims.clear();
-        for (Runnable r : cleanups) { try { r.run(); } catch (RuntimeException ignored) { } }
+        for (Runnable r : cleanups) {
+            try { r.run(); }
+            catch (RuntimeException ex) { System.err.println("[cinemática] falló una limpieza (se sigue con el resto): " + ex); }
+        }
         cleanups.clear();
     }
 }

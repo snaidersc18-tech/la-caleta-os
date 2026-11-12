@@ -28,6 +28,8 @@ public final class MascotView extends Pane {
 
     private final Group art;
     private final Group holder = new Group();
+    /** Cómo se detiene ESTE arte: se decide al crearlo (cada mascota sabe pararse), no preguntando su tipo después. */
+    private final Runnable stopArt;
     private Animation idle;
 
     public MascotView(Skin skin, double w, double h) {
@@ -37,11 +39,13 @@ public final class MascotView extends Pane {
             MechaSpiderArt mecha = new MechaSpiderArt();
             mecha.idle();
             art = mecha;
+            stopArt = mecha::stop;
         } else {
             TropicalHeartArt heart = new TropicalHeartArt();
             idle = heart.auraDrift();
             idle.play();
             art = heart;
+            stopArt = () -> { };                                   // su única animación es "idle", que se para abajo
         }
         holder.getChildren().add(art);
         getChildren().add(holder);
@@ -62,7 +66,7 @@ public final class MascotView extends Pane {
     }
 
     public void stop() {
-        if (art instanceof MechaSpiderArt m) m.stop();
+        stopArt.run();
         if (idle != null) idle.stop();
     }
 

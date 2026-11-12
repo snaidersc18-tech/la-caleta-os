@@ -10,7 +10,7 @@ import java.util.Random;
 
 /**
  * Botón con glitch al pasar el mouse: invierte colores (clase CSS "glitch") y corrompe
- * el texto durante unos milisegundos, con jitter horizontal. Respeta Settings.glitch.
+ * el texto durante unos milisegundos, con jitter horizontal. Respeta Settings.glitchProperty().
  */
 public class GlitchButton extends Button {
 
@@ -35,7 +35,7 @@ public class GlitchButton extends Button {
     public String baseText() { return baseText; }
 
     public void glitch() {
-        if (!Settings.get().glitch.get() || isDisabled()) return;
+        if (!Settings.get().glitchProperty().get() || isDisabled()) return;
         if (running != null) running.stop();
         running = new Timeline();
         int frames = 7;

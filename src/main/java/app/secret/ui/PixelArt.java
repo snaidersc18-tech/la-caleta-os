@@ -19,6 +19,11 @@ public final class PixelArt {
         });
     }
 
+    /** Pinta una {@link PixelGrid} sin exponer su arreglo interno fuera del paquete (mismo resultado que con la matriz). */
+    public static void draw(GraphicsContext g, PixelGrid grid, int[] palette, double x, double y, double px) {
+        draw(g, grid.g, palette, x, y, px);
+    }
+
     public static void draw(GraphicsContext g, int[][] grid, int[] palette, double x, double y, double px) {
         Color[] cols = colors(palette);
         for (int j = 0; j < grid.length; j++) {

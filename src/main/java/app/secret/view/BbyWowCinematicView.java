@@ -253,19 +253,24 @@ public final class BbyWowCinematicView implements Cinematic {
      * sin él, las dos marcas dadas para la escena y frases del show en las barras de la canción.
      */
     private static void loadPhrases(List<double[]> times, List<String> lines) {
-        try (InputStream in = BbyWowCinematicView.class.getResourceAsStream("/lyrics/bbywow.lrc")) {
-            if (in != null) {
-                Pattern p = Pattern.compile("\\[(\\d+):(\\d+(?:\\.\\d+)?)\\]\\s*(.*)");
-                BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
+        InputStream in = BbyWowCinematicView.class.getResourceAsStream("/lyrics/bbywow.lrc");
+        if (in != null) {
+            Pattern p = Pattern.compile("\\[(\\d+):(\\d+(?:\\.\\d+)?)\\]\\s*(.*)");
+            // el lector va en try-with-resources: al cerrarlo se cierra también el stream del recurso
+            try (BufferedReader r = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
                 for (String l; (l = r.readLine()) != null; ) {
                     Matcher m = p.matcher(l.trim());
                     if (!m.matches() || m.group(3).isBlank()) continue;
                     double ms = (Integer.parseInt(m.group(1)) * 60 + Double.parseDouble(m.group(2))) * 1000;
                     if (ms < END) { times.add(new double[]{ms}); lines.add(m.group(3).trim()); }
                 }
-                if (!lines.isEmpty()) return;
+            } catch (IOException | NumberFormatException ex) {      // el archivo existe pero no se puede leer: se avisa
+                System.err.println("[bbywow] No pude leer /lyrics/bbywow.lrc (se usan las frases por defecto): " + ex);
+                times.clear();
+                lines.clear();
             }
-        } catch (IOException | RuntimeException ignored) { /* sin archivo: frases por defecto */ }
+            if (!lines.isEmpty()) return;
+        }
         Object[][] fallback = {
                 {29_400.0, "ouh ah ah ah"},                                // el quiebre (hi-hats fuera)
                 {DROP, "BBY WOW"}, {DROP + BAR, "¡WOW!"}, {DROP + 2 * BAR, "EL GUACHIMÁN"}, {DROP + 3 * BAR, "EN VIVO"},

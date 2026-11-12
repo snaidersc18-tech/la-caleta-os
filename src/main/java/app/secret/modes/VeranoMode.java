@@ -27,10 +27,10 @@ public final class VeranoMode extends BaseMode {
     }
 
     @Override protected List<Supplier<Cinematic>> cinematics() {
-        return List.of(() -> DaveTheDiverAnimations.badBunny(ctx.audio()), () -> new VeranoCinematicView(ctx));
+        return List.of(() -> DaveTheDiverAnimations.badBunny(ctx().audio()), () -> new VeranoCinematicView(ctx()));
     }
 
-    @Override protected TakeoverView createInterface(Runnable exit) { return new VeranoTropicalView(ctx, exit); }
+    @Override protected TakeoverView createInterface(Runnable exit) { return new VeranoTropicalView(ctx(), exit); }
 
     @Override protected MusicTrack interfaceMusic() { return MusicTrack.BAD_BUNNY_THEME; }
 }

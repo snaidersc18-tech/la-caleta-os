@@ -436,7 +436,7 @@ public final class FerxxoDriftCinematic extends TakeoverView implements Cinemati
         expr = e;
         GraphicsContext g = face.getGraphicsContext2D();
         g.clearRect(0, 0, face.getWidth(), face.getHeight());
-        PixelArt.draw(g, FeidSprite.face(e).g, FeidSprite.PALETTE, 0, 0, FACE_PX);
+        PixelArt.draw(g, FeidSprite.face(e), FeidSprite.PALETTE, 0, 0, FACE_PX);
     }
 
     private void buildShine() {

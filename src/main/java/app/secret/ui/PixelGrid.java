@@ -9,7 +9,8 @@ import java.util.Random;
 public final class PixelGrid {
 
     public final int w, h;
-    public final int[][] g;
+    /** Celdas (fila, columna). Visible solo dentro de app.secret.ui: fuera se usa get/set. */
+    final int[][] g;
 
     public PixelGrid(int w, int h) { this.w = w; this.h = h; this.g = new int[h][w]; }
 

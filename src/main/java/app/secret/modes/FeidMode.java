@@ -28,10 +28,10 @@ public final class FeidMode extends BaseMode {
     }
 
     @Override protected List<Supplier<Cinematic>> cinematics() {
-        return List.of(() -> new FerxxoDriftCinematic(ctx));
+        return List.of(() -> new FerxxoDriftCinematic(ctx()));
     }
 
-    @Override protected TakeoverView createInterface(Runnable exit) { return new FerxxoRiderView(ctx, exit); }
+    @Override protected TakeoverView createInterface(Runnable exit) { return new FerxxoRiderView(ctx(), exit); }
 
     @Override protected MusicTrack interfaceMusic() { return MusicTrack.FEID_THEME; }
 }

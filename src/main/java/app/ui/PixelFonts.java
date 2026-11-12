@@ -3,6 +3,7 @@ package app.ui;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -22,7 +23,9 @@ public final class PixelFonts {
                     Font f = Font.loadFont(in, 14);
                     if (f != null) family = f.getFamily();
                 }
-            } catch (Exception ignored) { /* fallback */ }
+            } catch (IOException | RuntimeException ex) {             // se queda en Monospaced, pero queda rastro
+                System.err.println("[fuente] No pude cargar /fonts/pixel.ttf: " + ex);
+            }
         }
         return family;
     }

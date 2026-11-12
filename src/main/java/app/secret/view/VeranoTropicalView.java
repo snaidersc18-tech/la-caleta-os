@@ -279,7 +279,7 @@ public final class VeranoTropicalView extends TakeoverView {
     private void drawConcho(int pose, boolean flashOn) {
         GraphicsContext g = concho.getGraphicsContext2D();
         g.clearRect(0, 0, concho.getWidth(), concho.getHeight());
-        PixelArt.draw(g, ConchoSprite.generate(pose, flashOn).g, ConchoSprite.PALETTE, 0, 0, 5);
+        PixelArt.draw(g, ConchoSprite.generate(pose, flashOn), ConchoSprite.PALETTE, 0, 0, 5);
     }
 
     private static Button tropicalButton(String text, double size) {

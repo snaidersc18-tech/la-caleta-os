@@ -11,14 +11,21 @@ import java.nio.file.Path;
 public final class Settings {
     private static final Settings INSTANCE = new Settings();
 
-    public final BooleanProperty crt = new SimpleBooleanProperty(true);
-    public final BooleanProperty glitch = new SimpleBooleanProperty(true);
+    private final BooleanProperty crt = new SimpleBooleanProperty(true);
+    private final BooleanProperty glitch = new SimpleBooleanProperty(true);
     /** null = misma carpeta que el archivo de origen. */
-    public final ObjectProperty<Path> outputDir = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<Path> outputDir = new SimpleObjectProperty<>(null);
 
     private Settings() {}
 
     public static Settings get() { return INSTANCE; }
+
+    /** Efecto CRT (scanlines) encendido. */
+    public BooleanProperty crtProperty() { return crt; }
+    /** Glitch de botones y pantalla encendido. */
+    public BooleanProperty glitchProperty() { return glitch; }
+    /** Carpeta de salida elegida (null = junto al archivo de origen). */
+    public ObjectProperty<Path> outputDirProperty() { return outputDir; }
 
     public Path outDirFor(Path sibling) {
         Path d = outputDir.get();

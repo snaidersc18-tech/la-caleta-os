@@ -77,13 +77,13 @@ public final class CrtOverlay extends Pane {
         // 5) tiras de glitch aleatorias
         scheduleGlitch();
 
-        visibleProperty().bind(Settings.get().crt);
+        visibleProperty().bind(Settings.get().crtProperty());
     }
 
     private void scheduleGlitch() {
         PauseTransition wait = new PauseTransition(Duration.millis(1400 + rnd.nextInt(3600)));
         wait.setOnFinished(e -> {
-            if (Settings.get().glitch.get()) burst();
+            if (Settings.get().glitchProperty().get()) burst();
             scheduleGlitch();
         });
         wait.play();

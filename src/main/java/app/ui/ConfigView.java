@@ -17,21 +17,21 @@ final class ConfigView extends ChamferPane {
         Settings s = Settings.get();
 
         CheckBox crt = new CheckBox("Efecto CRT (scanlines, viñeta, parpadeo)");
-        crt.selectedProperty().bindBidirectional(s.crt);
+        crt.selectedProperty().bindBidirectional(s.crtProperty());
         CheckBox glitch = new CheckBox("Glitch en botones y tiras de interferencia");
-        glitch.selectedProperty().bindBidirectional(s.glitch);
+        glitch.selectedProperty().bindBidirectional(s.glitchProperty());
 
         TextField dir = new TextField();
         dir.setEditable(false);
         dir.setPromptText("(misma carpeta del archivo de origen)");
-        s.outputDir.addListener((o, a, b) -> dir.setText(b == null ? "" : b.toString()));
+        s.outputDirProperty().addListener((o, a, b) -> dir.setText(b == null ? "" : b.toString()));
         GlitchButton pick = Forms.squareButton(">");
         pick.setOnAction(e -> {
             File f = Forms.pickDir(getScene().getWindow(), "Carpeta de salida por defecto");
-            if (f != null) s.outputDir.set(Path.of(f.getAbsolutePath()));
+            if (f != null) s.outputDirProperty().set(Path.of(f.getAbsolutePath()));
         });
         GlitchButton reset = new GlitchButton("RESET");
-        reset.setOnAction(e -> s.outputDir.set(null));
+        reset.setOnAction(e -> s.outputDirProperty().set(null));
 
         Label info = new Label("""
                 Cifrado ........ AES-256-GCM (autenticado)

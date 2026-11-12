@@ -90,7 +90,7 @@ public final class SpiderBite {
 
     private final Pane host;
     private final Node shakeTarget;
-    private final Node homeSpider;
+    private final SpiderCanvas homeSpider;
     private final AudioManager audio;
     private final Runnable onCovered, onDone;
 
@@ -112,7 +112,7 @@ public final class SpiderBite {
     private final double restR = H / 2 - 40 - anchor.getY();        // centro de la araña a media pantalla
     private final double biteX = W / 2, biteY = anchor.getY() + restR + 36 * PX - SH / 2;   // la boca (fila ~36 del sprite)
 
-    private SpiderBite(Pane host, Node shakeTarget, Node homeSpider, AudioManager audio, Runnable onCovered, Runnable onDone) {
+    private SpiderBite(Pane host, Node shakeTarget, SpiderCanvas homeSpider, AudioManager audio, Runnable onCovered, Runnable onDone) {
         this.host = host;
         this.shakeTarget = shakeTarget;
         this.homeSpider = homeSpider;
@@ -128,7 +128,7 @@ public final class SpiderBite {
      * @param onCovered   la infección cubre el 100 % de la pantalla: cerrar el modo aquí
      * @param onDone      la araña aterrizó en su marco y la animación se desmontó
      */
-    public static void play(Pane host, Node shakeTarget, Node homeSpider, AudioManager audio, Runnable onCovered, Runnable onDone) {
+    public static void play(Pane host, Node shakeTarget, SpiderCanvas homeSpider, AudioManager audio, Runnable onCovered, Runnable onDone) {
         new SpiderBite(host, shakeTarget, homeSpider, audio, onCovered, onDone).start();
     }
 
@@ -378,7 +378,7 @@ public final class SpiderBite {
             squash.setFromX(1.06); squash.setFromY(0.92);
             squash.setToX(1); squash.setToY(1);
             squash.play();
-            if (homeSpider instanceof SpiderCanvas sc) sc.glitchFor(250);
+            homeSpider.glitchFor(250);
             upright.angleProperty().unbind();
             thread.endYProperty().unbind();
             spider.dispose();

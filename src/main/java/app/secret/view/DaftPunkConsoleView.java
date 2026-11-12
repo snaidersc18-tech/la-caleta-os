@@ -30,6 +30,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -227,7 +228,7 @@ public final class DaftPunkConsoleView extends TakeoverView {
             MetadataScrubber.Report r = scrubber.inspect(cover);
             chipPrint.setText(r.any() ? "HUELLA: SUCIA (" + r.format() + ")" : "HUELLA: limpia");
             log.log(r.any() ? "Huella detectada en el track: " + r.summary() : "El track no trae metadatos visibles.");
-        } catch (Exception ex) {
+        } catch (IOException | RuntimeException ex) {             // inspect() declara IOException; Image falla en runtime
             log.log("No pude leer el track: " + ex.getMessage());
         }
         spin.setRate(1.0);
@@ -267,7 +268,7 @@ public final class DaftPunkConsoleView extends TakeoverView {
             setBusy(false);
         });
         t.setOnFailed(e -> {
-            if (produced[0] != null) { try { Files.deleteIfExists(produced[0]); } catch (Exception ignored) { /* best effort */ } }
+            if (produced[0] != null) { try { Files.deleteIfExists(produced[0]); } catch (IOException | SecurityException ignored) { /* limpieza de mejor esfuerzo: el error real ya se reporta abajo */ } }
             log.log("ERROR: " + t.getException().getMessage());
             setBusy(false);
         });
@@ -342,7 +343,7 @@ public final class DaftPunkConsoleView extends TakeoverView {
     private void deleteCleanCover() {
         Path c = cleanCover;
         cleanCover = null;
-        if (c != null) { try { Files.deleteIfExists(c); } catch (Exception ignored) { /* best effort */ } }
+        if (c != null) { try { Files.deleteIfExists(c); } catch (IOException | SecurityException ignored) { /* temporal: si no se borra, lo limpia el SO */ } }
     }
 
     private static String shorten(String s) { return s.length() > 26 ? s.substring(0, 23) + "..." : s; }

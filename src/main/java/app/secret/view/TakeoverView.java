@@ -36,7 +36,10 @@ public abstract class TakeoverView extends StackPane {
         disposed = true;
         for (Animation a : animations) a.stop();
         animations.clear();
-        for (Runnable r : cleanups) { try { r.run(); } catch (RuntimeException ignored) { /* seguir */ } }
+        for (Runnable r : cleanups) {
+            try { r.run(); }
+            catch (RuntimeException ex) { System.err.println("[vista] falló una limpieza (se sigue con el resto): " + ex); }
+        }
         cleanups.clear();
     }
 

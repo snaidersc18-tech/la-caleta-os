@@ -265,8 +265,8 @@ public final class DaftPunkCinematicView extends TakeoverView implements Cinemat
         GraphicsContext l = avatarL.getGraphicsContext2D(), r = avatarR.getGraphicsContext2D();
         l.clearRect(0, 0, W, H);
         r.clearRect(0, 0, W, H);
-        PixelArt.draw(l, Avatars.generate(true, tick).g, Avatars.PALETTE, 380, 262, 6);
-        PixelArt.draw(r, Avatars.generate(false, tick).g, Avatars.PALETTE, 660, 262, 6);
+        PixelArt.draw(l, Avatars.generate(true, tick), Avatars.PALETTE, 380, 262, 6);
+        PixelArt.draw(r, Avatars.generate(false, tick), Avatars.PALETTE, 660, 262, 6);
     }
 
     private void drawShadows() {
