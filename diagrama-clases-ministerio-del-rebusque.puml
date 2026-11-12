@@ -1,0 +1,346 @@
+' =============================================================================================
+'  Ministerio Del Rebusque — Documentación UML (PlantUML)
+'  Tres diagramas (cada @startuml genera una imagen):
+'    1. Ministerio_Clases     → arquitectura por responsabilidades
+'    2. Ministerio_Comandos   → máquina de estados de los comandos (DAFTPUNK/BADBUNNY/FEID/SOFIA, CALLE, SALIR)
+'    3. Ministerio_Salir      → secuencia de "SALIR" (la Despedida) hasta Platform.exit()
+'  Render:  java -jar plantuml.jar diagrama-clases-ministerio-del-rebusque.puml
+' =============================================================================================
+
+@startuml Ministerio_Clases
+title Ministerio Del Rebusque — Arquitectura\n<size:12>gris = núcleo (cifrado + UI base) · azul = comandos y estados · amarillo = cinemáticas · verde = audio · lila = rendimiento</size>
+
+skinparam shadowing false
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam defaultFontName "Segoe UI"
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #555555
+}
+hide empty members
+hide circle
+
+' ------------------------------------------------------------------ arranque
+package "app.main" #EEEEEE {
+  class Main <<Application>> {
+    +start(Stage) : StackPane [UI | telón negro]
+    ~setIcons(Stage) : icono-16..256.png
+  }
+  class Launcher <<fat-jar / .exe>>
+}
+
+' ------------------------------------------------------------------ núcleo
+package "app.ui  (interfaz base)" #EEEEEE {
+  class MainView <<StackPane>> {
+    +introFinished()
+    +stampSpider()
+    +spider() : SpiderCanvas
+    +isLove() / revertLove()
+  }
+  class ConsolePanel {
+    +setCommandLine(String)
+  }
+  class CureView <<CURAR>>
+  class InputLock {
+    +lock(String) / hideBanner()
+  }
+  class SpiderCanvas <<El Guachimán>>
+}
+
+package "app.crypto · app.stega  (AES-256-GCM + LSB)" #EEEEEE {
+  class StegoVault
+  class CryptoService
+}
+
+' ------------------------------------------------------------------ comandos y estados
+package "app.secret  (comandos y estados)" #DDEEFF {
+  class EasterEggManager <<router de comandos>> {
+    {static} +install(MainView, AudioManager)
+    -trigger(SecretMode)
+    -backToStreet() : CALLE
+    -farewell() : SALIR
+  }
+  class TriggerHook <<filtro de Window>> {
+    ~on(palabra, acción)
+    ~onBuffer(eco consola)
+    ESC suelta campos de texto
+  }
+  class TakeoverStateMachine {
+    +transition(State) : boolean
+    IDLE→TAKEOVER→CINEMATIC→INTERFACE→RESTORING
+  }
+  class SecretContext <<Facade>> {
+    +layer() / overlay()
+    +takeover() / restore()
+    +requestStreet() : CALLE desde una consola propia
+  }
+  interface SecretMode
+  abstract class BaseMode <<Template Method>>
+  class DaftPunkMode
+  class VeranoMode
+  class SectorSpMode
+  class FeidMode <<FEID · FERXXO>>
+  class BbyWowMode <<BBYWOW · concierto>>
+}
+
+' ------------------------------------------------------------------ cinemáticas
+package "controladores de cinemáticas" #FFF2D6 {
+  class UndergroundIntro <<arranque · 1 AnimationTimer>>
+  class SpiderBite <<CALLE · mordisco + péndulo>>
+  class CafecitoExit <<SALIR · cafetería + "Bonito, Bonito">> {
+    {static} +play(...)
+  }
+  interface Cinematic {
+    +play(onFinished)
+    +dissolve() / stop()
+  }
+  class DaftPunkCinematicView <<concierto en vivo>>
+  class "DaveTheDiverAnimations.Playback" as Playback
+  class FerxxoDriftCinematic <<callejón · 1 AnimationTimer>> {
+    moto entra → drift aplasta a la araña → se baja → grills → flash blanco
+  }
+}
+
+package "BBYWOW (concierto)" #E0F7FA {
+  class BbyWowCinematicView <<Cinematic · 1 AnimationTimer>> {
+    0–1 s apagón · descenso por la telaraña
+    28.9 s quiebre: se detiene y canta
+    31.86 s DROP: flashazo blanco → estadio
+    láseres ADD (rectángulos que giran) + FadeTransition
+    pantallas = SpectrumWave · público (texturas) · mini arañas
+    69.6 s apagón → ctx.requestStreet()
+  }
+  class LyricFireworks <<Pane · partículas>> {
+    +launchPhrase(texto, x0, y0, x, y, vueloMs)
+    +launchSparkle(...) / step(dt) / clear()
+    explota en el ms de la frase → Text neón
+    ScaleTransition + FadeTransition
+  }
+  class MusicReactor <<AudioSpectrumListener>> {
+    +heartbeat(nodo, profundidad) : graves → escala
+    +wave(SpectrumWave) / onKick(Runnable)
+  }
+  class SpectrumWave <<Canvas>> {
+    ondas suaves por bandas (escala log)
+  }
+  class WigSpider <<Canvas · "bichota">> {
+    coletas azules · ganchos de estrella
+    ojos ^ ^ · sonrisa · gargantilla
+    +pose(fase, bocaAbierta)
+    {static} +image(px, fase, boca)
+  }
+}
+
+package "FERXXO RIDER (FEID)" #D9FFE6 {
+  class FerxxoRiderView <<mini-juego · endless runner>> {
+    -loop : AnimationTimer (gravedad, vy, salto variable)
+    -spawn() : vallas · conos · huecos
+    getBoundsInParent().intersects(...)
+    parallax 3 capas · KM recorridos
+    mini-consola: CALLE + Enter
+  }
+  class FerxxoRiderArt <<pixel art #00FF66>> {
+    {static} +bike(frame) / rider(bob) : 60x64
+    {static} +cone() / barrier() / pothole()
+    {static} +alley() / sky() / city() / street()
+    {static} +prepareInBackground()
+  }
+  class FeidSprite <<pixel art #00FF66>> {
+    {static} +body(pose) : 36x60
+    {static} +face(gesto) : 48x48
+  }
+}
+
+' ------------------------------------------------------------------ audio
+package "app.secret.audio" #E3F6E8 {
+  class AudioManager {
+    +play(SoundEffect)  : AudioClip precargado
+    +playMusic(MusicTrack, startMs) : stop() limpio de la anterior
+    +stopAll() : CALLE corta música y SFX
+    +beats() : currentTime real → nº de beat
+    +whenMusicPlaying(DoubleConsumer)
+    +playIntro() / fadeOutIntro()
+    +musicPositionMs() : sincronía al beat
+    +onMusicTime(track, sink) : currentTimeProperty
+    +onMusicSpectrum(track, sink) : AudioSpectrumListener
+  }
+  class SongCues <<cues en ms de canción>> {
+    +at(ms, acción)
+    +start(audio, track, fallbackMs)
+  }
+  enum SoundEffect {
+    … GRILL_SHINE
+    MOTO_ENGINE · MOTO_DRIFT · MOTO_CRUSH
+    MOTO_REV · MOTO_CRASH
+  }
+  enum MusicTrack {
+    DAFT_PUNK_THEME  123.48 BPM · drop 19.630 s
+    BAD_BUNNY_THEME  108 BPM · drop 17.912 s
+    FEID_THEME  97 BPM · drop 32.555 s
+    SOFIA_THEME  99.75 BPM · entrada 10.240 s
+    CAFECITO_THEME · CALLE_THEME
+    BBYWOW_THEME  120 BPM · drop 31.860 s
+    +bpm / firstBeatMs / dropMs
+  }
+  class BeatSync <<AnimationTimer>> {
+    +lock(Animation, periodoBeats, offsetBeats)
+    jumpTo si se desfasa > 18 ms
+    {static} NOD : interpolador de cabeceo
+  }
+}
+
+' ------------------------------------------------------------------ rendimiento
+package "app.animations  (rendimiento)" #EFE6FA {
+  class RenderTuning {
+    {static} +cacheEffects(Node)
+  }
+  class FpsProbe {
+    {static} +startIfEnabled()
+    {static} +scene(String)
+  }
+}
+
+' ------------------------------------------------------------------ relaciones
+Launcher ..> Main
+Main *-- MainView
+Main ..> UndergroundIntro : frame 0
+Main ..> EasterEggManager : install(view, audio)
+Main ..> FpsProbe
+
+MainView *-- ConsolePanel
+MainView *-- CureView
+MainView *-- InputLock
+MainView *-- SpiderCanvas
+CureView --> StegoVault
+StegoVault --> CryptoService
+
+EasterEggManager *-- TriggerHook
+EasterEggManager *-- SecretContext
+EasterEggManager o-- "4" SecretMode
+SecretContext *-- TakeoverStateMachine
+SecretContext o-- AudioManager
+SecretContext --> MainView
+SecretMode <|.. BaseMode
+BaseMode <|-- DaftPunkMode
+BaseMode <|-- VeranoMode
+BaseMode <|-- SectorSpMode
+BaseMode <|-- FeidMode
+BaseMode <|-- BbyWowMode
+BbyWowMode ..> BbyWowCinematicView : cinemática (sin interfaz)
+Cinematic <|.. BbyWowCinematicView
+BbyWowCinematicView ..> WigSpider : araña principal + mini arañas
+BbyWowCinematicView ..> LyricFireworks : un cohete por frase
+BbyWowCinematicView ..> SongCues : drop / apagón / frases (currentTime)
+BbyWowCinematicView ..> MusicReactor : espectro → pantallas + fondo
+MusicReactor ..> SpectrumWave
+MusicReactor ..> AudioManager : onMusicSpectrum()
+BbyWowCinematicView ..> SecretContext : requestStreet() (péndulo de CALLE)
+FeidMode ..> FerxxoDriftCinematic : cinemática
+FeidMode ..> FerxxoRiderView : interfaz (mini-juego)
+Cinematic <|.. FerxxoDriftCinematic
+FerxxoDriftCinematic ..> FerxxoRiderArt
+FerxxoDriftCinematic ..> FeidSprite : primer plano + grills
+FerxxoRiderView ..> FerxxoRiderArt
+FerxxoRiderArt ..> FeidSprite : paleta
+FerxxoDriftCinematic ..> AudioManager : MOTO_ENGINE · MOTO_DRIFT · MOTO_CRUSH · GRILL_SHINE
+FerxxoRiderView ..> AudioManager : FEID_THEME en bucle · MOTO_REV · MOTO_CRASH
+FerxxoRiderView ..> SecretContext : requestStreet() (CALLE)
+MainView ..> FerxxoRiderArt : prepareInBackground()
+BaseMode ..> Cinematic : encadena
+BaseMode ..> RenderTuning : cacheEffects()
+Cinematic <|.. DaftPunkCinematicView
+Cinematic <|.. Playback
+
+EasterEggManager ..> SpiderBite : "CALLE"
+EasterEggManager ..> CafecitoExit : "SALIR"
+SpiderBite ..> SpiderCanvas : aterriza en su marco
+CafecitoExit ..> SpiderSprite : cuerpo + patas-brazos
+UndergroundIntro ..> AudioManager : playIntro()
+CafecitoExit ..> AudioManager : CAFECITO_THEME + SongCues
+DaftPunkCinematicView ..> AudioManager : musicPositionMs()
+AudioManager ..> SoundEffect
+AudioManager ..> MusicTrack
+BeatSync ..> AudioManager : beats()
+DaftPunkCinematicView ..> BeatSync : cabeceo + estrobos
+Playback ..> AudioManager : playMusic(drop − impacto)\n+ seguidor de velocidad
+FerxxoDriftCinematic ..> MusicTrack : reloj = currentTime\n(blanco en el drop)
+
+legend right
+  |= Flecha |= Lectura |
+  | —▷ / ‥▷ | hereda / implementa |
+  | ◆— | compone (vive y muere con el dueño) |
+  | ◇— | agrega (comparte) |
+  | ‥> | usa / crea |
+  Dependencias: app.secret → núcleo, nunca al revés.
+endlegend
+@enduml
+
+' =============================================================================================
+
+@startuml Ministerio_Comandos
+title Máquina de estados de los COMANDOS (Zero-UI: no hay botones de escape)
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+skinparam state {
+  BackgroundColor #FFFFFF
+  BorderColor #2B2B2B
+}
+
+[*] --> INTRO : frame 0 (telón negro)
+INTRO --> MENU : flash + sello de la araña\n(introDone = true)
+note right of INTRO : todo comando se ignora
+
+state "MENU (fsm = IDLE)" as MENU
+MENU --> MODO : DAFTPUNK · BADBUNNY · CONCHO · FEID · FERXXO · SOFIA
+MENU --> AMOR : PICAKU (núcleo)
+MENU --> DESPEDIDA : SALIR
+
+state "MODO SECRETO" as MODO {
+  [*] --> TAKEOVER
+  TAKEOVER --> CINEMATIC
+  CINEMATIC --> INTERFACE : setOnFinished de la última cinemática
+}
+MODO --> MORDISCO : CALLE
+note right of MODO : FEID / FERXXO → mini-juego FERXXO RIDER:\nCALLE + Enter en su mini-consola\n(congela el juego y corta la música en el acto)
+AMOR --> MORDISCO : CALLE
+
+state "MORDISCO (busy)" as MORDISCO
+MORDISCO : baja · muerde · infección cubre todo
+MORDISCO : onCovered → deactivate() / revertLove()
+MORDISCO : péndulo → aterriza en su marco
+MORDISCO --> MENU : onDone
+
+state "DESPEDIDA (busy)" as DESPEDIDA
+DESPEDIDA : cafecito sincronizado con la letra (≈33 s)
+DESPEDIDA --> [*] : fundido a negro → Platform.exit()
+@enduml
+
+' =============================================================================================
+
+@startuml Ministerio_Salir
+title "SALIR" → el Cafecito → Platform.exit()
+skinparam shadowing false
+skinparam defaultFontName "Segoe UI"
+autonumber
+
+actor Usuario
+participant "Window\n(TriggerHook)" as Hook
+participant EasterEggManager as EEM
+participant InputLock as Lock
+participant CafecitoExit as SF
+participant AudioManager as Audio
+participant "SongCues\n(currentTime)" as TL
+
+Usuario -> Hook : teclea S·A·L·I·R
+Hook -> EEM : farewell()  [solo si fsm = IDLE y la intro terminó]
+EEM -> Lock : lock("")  (entrada bloqueada)
+EEM -> SF : play(overlay, araña, UI, audio, …)
+SF -> SF : UI → caché de GPU; pinta la cafetería
+SF -> Audio : playMusic(CAFECITO_THEME)
+SF -> TL : start(audio)
+TL -> TL : 0–1.2 s cafetería encima, UI oculta\nlámparas · emblema · hilo\n20.65 s café · 25.5 s sonrisa · 30.0 s abrazo
+TL -> SF : 32.7 s fundido a negro (0.3 s)
+SF -> Audio : shutdown()
+SF -> SF : Platform.exit()
+@enduml

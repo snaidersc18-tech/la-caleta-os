@@ -1,0 +1,94 @@
+/* Ministerio Del Rebusque — las variables -ar-* las escribe Theme.java en el root (STREET <-> LOVE). */
+
+.root {
+    -fx-background-color: -ar-bg;
+    -fx-font-size: 15px;
+    -fx-text-fill: -ar-fg;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.label { -fx-text-fill: -ar-fg; }
+.ar-dim { -fx-text-fill: -ar-dim; }
+.ar-title { -fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: -ar-fg; }
+.ar-heading { -fx-font-size: 17px; -fx-font-weight: bold; -fx-text-fill: -ar-fg; }
+
+/* cabeceras blancas (consola, mascara, menu) */
+.ar-header { -fx-background-color: -ar-fg; }
+.ar-header .label, .ar-header-label { -fx-text-fill: -ar-bg; -fx-font-weight: bold; -fx-padding: 2 8 2 8; }
+.ar-console-title { -fx-text-fill: -ar-bg; -fx-font-weight: bold; -fx-font-size: 16px; -fx-padding: 4 10 4 10; }
+.ar-inner-title { -fx-text-fill: -ar-fg; -fx-font-weight: bold; -fx-font-size: 14px; }
+
+.ar-frame { -fx-background-color: -ar-fg, -ar-bg; -fx-background-insets: 0, 2; }
+.ar-console { -fx-background-color: -ar-bg; -fx-border-color: -ar-fg; -fx-border-width: 0 2 2 2; }
+.ar-group { -fx-border-color: -ar-fg; -fx-border-width: 2; -fx-background-color: -ar-panel; }
+.ar-rule { -fx-background-color: -ar-fg; }
+
+/* botones */
+.ar-button {
+    -fx-background-color: -ar-fg, -ar-bg;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 0;
+    -fx-text-fill: -ar-fg;
+    -fx-padding: 7 12 7 12;
+    -fx-alignment: CENTER_LEFT;
+    -fx-cursor: hand;
+}
+.ar-button:hover, .ar-button.selected { -fx-background-color: -ar-fg, -ar-fg; -fx-text-fill: -ar-bg; }
+.ar-button.glitch { -fx-background-color: -ar-accent, -ar-accent; -fx-text-fill: -ar-bg; }
+.ar-button:disabled { -fx-opacity: 0.4; }
+.ar-button:pressed { -fx-background-color: -ar-accent, -ar-accent; -fx-text-fill: -ar-bg; }
+.ar-menu { -fx-font-size: 16px; -fx-padding: 9 12 9 12; }
+.ar-primary { -fx-alignment: CENTER; -fx-font-weight: bold; -fx-background-color: -ar-accent, -ar-bg; -fx-text-fill: -ar-accent; }
+.ar-primary:hover { -fx-background-color: -ar-accent, -ar-accent; -fx-text-fill: -ar-bg; }
+.ar-square { -fx-alignment: CENTER; -fx-padding: 6 8 6 8; }
+.ar-win { -fx-alignment: CENTER; -fx-padding: 2 9 2 9; -fx-font-weight: bold; }
+
+/* backdoor casi invisible dentro de la cabecera de la consola */
+.ar-backdoor {
+    -fx-background-color: transparent; -fx-background-radius: 0;
+    -fx-text-fill: -ar-bg; -fx-opacity: 0.09; -fx-font-size: 11px; -fx-cursor: hand;
+}
+.ar-backdoor:hover { -fx-opacity: 1; -fx-background-color: -ar-bg; -fx-text-fill: -ar-accent; }
+
+/* campos */
+.text-field, .password-field, .text-area {
+    -fx-background-color: -ar-fg, -ar-bg;
+    -fx-background-insets: 0, 2;
+    -fx-background-radius: 0;
+    -fx-text-fill: -ar-fg;
+    -fx-prompt-text-fill: -ar-dim;
+    -fx-highlight-fill: -ar-fg;
+    -fx-highlight-text-fill: -ar-bg;
+    -fx-padding: 7 8 7 8;
+}
+.text-field:focused, .password-field:focused, .text-area:focused { -fx-background-color: -ar-accent, -ar-bg; }
+.text-area { -fx-control-inner-background: -ar-bg; }
+.text-area .content { -fx-background-color: -ar-bg; }
+.text-area .viewport { -fx-background-color: -ar-bg; }
+
+/* checkbox */
+.check-box { -fx-text-fill: -ar-fg; }
+.check-box .box { -fx-background-color: -ar-fg, -ar-bg; -fx-background-insets: 0, 2; -fx-background-radius: 0; -fx-padding: 6; }
+.check-box:selected .box { -fx-background-color: -ar-fg, -ar-accent; }
+.check-box .mark { -fx-background-color: transparent; }
+
+/* progress */
+.progress-bar > .track { -fx-background-color: -ar-fg, -ar-bg; -fx-background-insets: 0, 2; -fx-background-radius: 0; }
+.progress-bar > .bar { -fx-background-color: -ar-accent; -fx-background-insets: 4; -fx-background-radius: 0; -fx-padding: 0.5em; }
+.progress-bar { -fx-pref-height: 34; }
+
+/* scroll */
+.scroll-pane, .scroll-pane > .viewport { -fx-background-color: transparent; }
+.scroll-pane > .corner { -fx-background-color: transparent; }
+.scroll-bar { -fx-background-color: transparent; }
+.scroll-bar > .track { -fx-background-color: -ar-panel; -fx-background-radius: 0; }
+.scroll-bar > .thumb { -fx-background-color: -ar-fg; -fx-background-radius: 0; }
+.scroll-bar > .increment-button, .scroll-bar > .decrement-button { -fx-padding: 0; -fx-background-color: transparent; }
+.scroll-bar .increment-arrow, .scroll-bar .decrement-arrow { -fx-padding: 0; -fx-shape: " "; }
+
+/* letrero del bloqueo de entrada */
+.ar-lock-banner {
+    -fx-background-color: -ar-alert; -fx-text-fill: #050505; -fx-font-weight: bold;
+    -fx-font-size: 16px; -fx-padding: 5 16 5 16;
+}
